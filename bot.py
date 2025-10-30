@@ -11,6 +11,30 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
 
+
+from flask import Flask
+import threading
+
+# ایجاد یک سرور Flask ساده برای باز نگه داشتن پورت
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "🤖 Telegram Bot is Running"
+
+@app.route('/health')
+def health_check():
+    return "✅ OK"
+
+def run_flask():
+    app.run(host='0.0.0.0', port=5000, debug=False)
+
+# اجرای Flask در thread جداگانه
+flask_thread = threading.Thread(target=run_flask, daemon=True)
+flask_thread.start()
+
+print("✅ Flask server started on port 5000")
+
 # ======= تنظیمات ربات =======
 BOT_TOKEN = os.getenv('BOT_TOKEN', '8222491315:AAHT4oj9Et9GiBEr_wJAlZ8kzxG2uMOr5DE')
 ADMIN_TELEGRAM_ID = 6328795262  # تغییر به آیدی خودتان
@@ -1601,3 +1625,4 @@ async def main():
 if __name__ == "__main__":
 
     asyncio.run(main())
+
